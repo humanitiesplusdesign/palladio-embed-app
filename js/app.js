@@ -162,7 +162,10 @@ var app = angular.module('palladioEmbedApp', ['ui.codemirror'])
     
     function loadFacet(visualization) {
       var newId = appendNewDivWithID(visualization);
-      console.log(visualization.importJson.dimKeys);
+      var settingsId = 'facetSettingsId';
+      var newDiv = document.createElement('div');
+      newDiv.setAttribute('id', settingsId)
+      document.getElementById('settings').appendChild(newDiv)
       components.promiseAdd('facet', newId, {
         height: "300px",
         showControls: false,
@@ -170,6 +173,8 @@ var app = angular.module('palladioEmbedApp', ['ui.codemirror'])
         showAccordion: false,
         showDropArea: false,
         dimensions: components.dimensionsFromKeys(visualization.importJson.dimKeys)
+      }).then(function(opts) {
+        opts.instantiateSettings('#' + settingsId, newId);
       });
     }
     

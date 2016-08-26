@@ -23,7 +23,7 @@
     <script type="text/javascript" src="bower_components/codemirror/mode/css/css.js"></script>
     <script type="text/javascript" src="bower_components/codemirror/mode/htmlmixed/htmlmixed.js"></script>
 
-    <script src="bower_components/palladio/palladio.min.js"></script>
+    <script src="bower_components/palladio/palladio.js"></script>
     <script src="bower_components/palladio-timeline-component/dist/palladio-timeline-component.min.js"></script>
     <script src="bower_components/palladio-facet-component/dist/palladio-facet-component.min.js"></script>
     <script src="bower_components/palladio-timespan-component/dist/palladio-timespan-component.min.js"></script>
@@ -49,6 +49,7 @@
         <div class="col-md-3" ng-app="palladioEmbedApp">
           <!-- Visualization configuration area -->
           <h2>Configure here</h2>
+          <div id="settings"></div>
           <div ng-controller="EmbedCtrl">
             
             <!-- Load file -->
