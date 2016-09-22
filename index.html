@@ -62,9 +62,16 @@
             
             <!-- Add components -->
             <div data-ng-show="file" class="row">
+              <h3>From file</h3>
               <div ng-repeat="visualization in visualizations" data-ng-click="addVisualization(visualization)">
                 {{visualization.description}}
               </div>
+
+              <h3>New</h3>
+              <div ng-repeat="visualization in newVisualizations" data-ng-click="addVisualization(visualization)">
+                {{visualization.description}}
+              </div>
+
               <div data-ng-show="visualizations.length === 0">
                 <button class="btn btn-default" data-ng-click="startOver()">Start over</button>
               </div>

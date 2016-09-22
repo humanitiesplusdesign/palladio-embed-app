@@ -5,6 +5,15 @@ var app = angular.module('palladioEmbedApp', ['ui.codemirror'])
     
     $scope.file = undefined;
     $scope.visualizations = [];
+    $scope.newVisualizations = [
+      {
+        type: 'facet',
+        description: 'Facet filter',
+        importJson: {
+          dimKeys: []
+        }
+      }
+    ];
     
     $scope.embedCode = [
       '<meta charset="utf-8">',
@@ -174,8 +183,17 @@ var app = angular.module('palladioEmbedApp', ['ui.codemirror'])
         showDropArea: false,
         dimensions: components.dimensionsFromKeys(visualization.importJson.dimKeys)
       }).then(function(opts) {
-        opts.instantiateSettings('#' + settingsId, newId);
+        extractSettingsAndMove(opts.getSettings(), newDiv, "300px")
       });
+    }
+
+    function extractSettingsAndMove(element, appendTo, height) {
+      // Strip ng-show
+      $(element).removeAttr('ng-show');
+      $(element).removeClass('ng-hide');
+      $(element).height(height);
+      element.remove();
+      appendTo.appendChild(element);
     }
     
     function appendNewDivWithID(visualization) {
