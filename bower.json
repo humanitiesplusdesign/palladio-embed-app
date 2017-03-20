@@ -26,12 +26,5 @@
     "palladio-map-component": "^1.1.3",
     "palladio-table-component": "^1.1.2",
     "palladio-cards-component": "^1.0.1"
-  },
-  "resolutions": {
-    "palladio": "^1.2.1",
-    "palladio-facet-component": "^1.1.0",
-    "palladio-timespan-component": "^1.1.0",
-    "palladio-map-component": "^1.1.3",
-    "palladio-table-component": "^1.1.2"
   }
 }

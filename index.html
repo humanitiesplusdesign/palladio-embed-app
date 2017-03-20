@@ -24,12 +24,12 @@
     <script type="text/javascript" src="bower_components/codemirror/mode/htmlmixed/htmlmixed.js"></script>
 
     <script src="bower_components/palladio/palladio.js"></script>
-    <script src="bower_components/palladio-timeline-component/dist/palladio-timeline-component.min.js"></script>
-    <script src="bower_components/palladio-facet-component/dist/palladio-facet-component.min.js"></script>
-    <script src="bower_components/palladio-timespan-component/dist/palladio-timespan-component.min.js"></script>
-    <script src="bower_components/palladio-graph-component/dist/palladio-graph-component.min.js"></script>
-    <script src="bower_components/palladio-map-component/dist/palladio-map-component.min.js"></script>
-    <script src="bower_components/palladio-table-component/dist/palladio-table-component.min.js"></script>
+    <script src="bower_components/palladio-timeline-component/dist/palladio-timeline-component.js"></script>
+    <script src="bower_components/palladio-facet-component/dist/palladio-facet-component.js"></script>
+    <script src="bower_components/palladio-timespan-component/dist/palladio-timespan-component.js"></script>
+    <script src="bower_components/palladio-graph-component/dist/palladio-graph-component.js"></script>
+    <script src="bower_components/palladio-map-component/dist/palladio-map-component.js"></script>
+    <script src="bower_components/palladio-table-component/dist/palladio-table-component.js"></script>
     <script src="bower_components/palladio-cards-component/dist/palladio-cards-component.js"></script>
     <script type="text/javascript" src="bower_components/angular-ui-codemirror/ui-codemirror.min.js"></script>
     
@@ -61,7 +61,7 @@
             </div>
             
             <!-- Add components -->
-            <div data-ng-show="file" class="row">
+            <div data-ng-show="file" class="row clear">
               <h3>From file</h3>
               <div ng-repeat="visualization in visualizations" data-ng-click="addVisualization(visualization)">
                 {{visualization.description}}

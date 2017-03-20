@@ -12,6 +12,36 @@ var app = angular.module('palladioEmbedApp', ['ui.codemirror'])
         importJson: {
           dimKeys: []
         }
+      },
+      {
+        type: 'timeline',
+        description: 'Timeline',
+        importJson: {}
+      },
+      {
+        type: 'timespan',
+        description: 'Timespan',
+        importJson: {}
+      },
+      {
+        type: 'mapView',
+        description: 'Map',
+        importJson: null
+      },
+      {
+        type: 'graphView',
+        description: 'Graph',
+        importJson: null
+      },
+      {
+        type: 'tableView',
+        description: 'Table',
+        importJson: null
+      },
+      {
+        type: 'listView',
+        description: 'Cards',
+        importJson: null
       }
     ];
     
@@ -95,6 +125,10 @@ var app = angular.module('palladioEmbedApp', ['ui.codemirror'])
     
     function loadTimeline(visualization) {
       var newId = appendNewDivWithID(visualization);
+      var settingsId = 'timelineSettingsId';
+      var newDiv = document.createElement('div');
+      newDiv.setAttribute('id', settingsId)
+      document.getElementById('settings').appendChild(newDiv)
       var timeline = components.promiseAdd('timeline', newId, {
         showControls: false,
         showSettings: false,
@@ -103,11 +137,18 @@ var app = angular.module('palladioEmbedApp', ['ui.codemirror'])
       }).then(function(opts) {
         opts.date(components.dimensionFromKey(visualization.importJson.dateProp));
         opts.group(visualization.importJson.groupProp ? components.dimensionFromKey(visualization.importJson.groupProp) : null);
+        return opts
+      }).then(function(opts) {
+        extractSettingsAndMove(opts.getSettings(), newDiv, "300px")
       });
     }
     
     function loadTimespan(visualization) {
       var newId = appendNewDivWithID(visualization);
+      var settingsId = 'timespanSettingsId';
+      var newDiv = document.createElement('div');
+      newDiv.setAttribute('id', settingsId)
+      document.getElementById('settings').appendChild(newDiv)
       components.promiseAdd('timespan', newId, {
         showControls: false,
         showSettings: false,
@@ -119,53 +160,82 @@ var app = angular.module('palladioEmbedApp', ['ui.codemirror'])
         opts.tooltipDimension(components.dimensionFromKey(visualization.importJson.tooltipLabelDim));
         // Group dimension is currently not saved in file
         // opts.groupDimension(components.dimensionFromKey(visualization.importJson.groupDim));
+        return opts
+      }).then(function(opts) {
+        extractSettingsAndMove(opts.getSettings(), newDiv, "300px")
       });
     }
     
     function loadMap(visualization) {
       var newId = appendNewDivWithID(visualization);
+      var settingsId = 'mapSettingsId';
+      var newDiv = document.createElement('div');
+      newDiv.setAttribute('id', settingsId)
+      document.getElementById('settings').appendChild(newDiv)
       var map = components.promiseAdd('map', newId, {
         height: "300px",
         showSettings: false
       }).then(function(opts) {
         opts.importState(visualization.importJson );
+        return opts;
+      }).then(function(opts) {
+        extractSettingsAndMove(opts.getSettings(), newDiv, "300px")
       });
     }
     
     function loadGraph(visualization) {
       var newId = appendNewDivWithID(visualization);
+      var settingsId = 'graphSettingsId';
+      var newDiv = document.createElement('div');
+      newDiv.setAttribute('id', settingsId)
+      document.getElementById('settings').appendChild(newDiv)
       var graph = components.promiseAdd('graph', newId, {
         height: "300px",
         showSettings: false
       }).then(function(opts) {
-        opts.source(components.dimensionFromKey(visualization.importJson.sourceDimension));
-        opts.target(components.dimensionFromKey(visualization.importJson.targetDimension));
-        opts.nodeSize(visualization.importJson.nodeSize);
+        if(visualization.importJson) opts.source(components.dimensionFromKey(visualization.importJson.sourceDimension));
+        if(visualization.importJson) opts.target(components.dimensionFromKey(visualization.importJson.targetDimension));
+        if(visualization.importJson) opts.nodeSize(visualization.importJson.nodeSize);
+        return opts
+      }).then(function(opts) {
+        extractSettingsAndMove(opts.getSettings(), newDiv, "300px")
       });
     }
     
     function loadTable(visualization) {
       var newId = appendNewDivWithID(visualization);
+      var settingsId = 'tableSettingsId';
+      var newDiv = document.createElement('div');
+      newDiv.setAttribute('id', settingsId)
+      document.getElementById('settings').appendChild(newDiv)
       components.promiseAdd('table', newId, {
         height: "300px",
         showSettings: false,
-        row: components.dimensionFromKey(visualization.importJson.countDim.key),
-        dimensions: components
-          .dimensionsFromKeys(visualization.importJson.tableDimensions.map(function(d) { return d.key; }))
+        row: visualization.importJson ? components.dimensionFromKey(visualization.importJson.countDim.key) : null,
+        dimensions: visualization.importJson ? components
+          .dimensionsFromKeys(visualization.importJson.tableDimensions.map(function(d) { return d.key; })) : null
+      }).then(function(opts) {
+        extractSettingsAndMove(opts.getSettings(), newDiv, "300px")
       });
     }
     
     function loadCards(visualization) {
       var newId = appendNewDivWithID(visualization);
+      var settingsId = 'cardsSettingsId';
+      var newDiv = document.createElement('div');
+      newDiv.setAttribute('id', settingsId)
+      document.getElementById('settings').appendChild(newDiv)
       components.promiseAdd('cards', newId, {
         height: "300px",
-        showSettings: false,
-        titleDim: components.dimensionFromKey(visualization.importJson.titleDim),
-        subtitleDim: components.dimensionFromKey(visualization.importJson.subtitleDim),
-        textDim: components.dimensionFromKey(visualization.importJson.textDim),
-        linkDim: components.dimensionFromKey(visualization.importJson.linkDim),
-        imgUrlDim: components.dimensionFromKey(visualization.importJson.imgurlDim),
-        sortDim: components.dimensionFromKey(visualization.importJson.sortDim)
+        showSettings: true,
+        titleDim: visualization.importJson ? components.dimensionFromKey(visualization.importJson.titleDim) : null,
+        subtitleDim: visualization.importJson ? components.dimensionFromKey(visualization.importJson.subtitleDim) : null,
+        textDim: visualization.importJson ? components.dimensionFromKey(visualization.importJson.textDim) : null,
+        linkDim: visualization.importJson ? components.dimensionFromKey(visualization.importJson.linkDim) : null,
+        imgUrlDim: visualization.importJson ? components.dimensionFromKey(visualization.importJson.imgurlDim) : null,
+        sortDim: visualization.importJson ? components.dimensionFromKey(visualization.importJson.sortDim) : null
+      }).then(function(opts) {
+        extractSettingsAndMove(opts.getSettings(), newDiv, "300px")
       });
     }
     
@@ -191,6 +261,10 @@ var app = angular.module('palladioEmbedApp', ['ui.codemirror'])
       // Strip ng-show
       $(element).removeAttr('ng-show');
       $(element).removeClass('ng-hide');
+      $(element).removeClass('col-lg-3');
+      $(element).removeClass('col-md-4');
+      $(element).addClass('col-md-12');
+      $(element).addClass('clear');
       $(element).height(height);
       element.remove();
       appendTo.appendChild(element);
@@ -206,29 +280,30 @@ var app = angular.module('palladioEmbedApp', ['ui.codemirror'])
     }
     
     function embedCodeFromFunction(func, vis) {
+      var json = vis.importJson ? vis.importJson : {}
       var replacements = {
         'var timeline = ': '',
         'var map = ': '',
         'var graph = ': '',
         'newId': '\'#' + vis.type + '-id-here\'',
-        'visualization.importJson.dateProp': JSON.stringify(vis.importJson.dateProp),
-        'visualization.importJson.groupProp': JSON.stringify(vis.importJson.groupProp),
-        'visualization.importJson.dimKeys': JSON.stringify(vis.importJson.dimKeys),
-        'visualization.importJson ': JSON.stringify(vis.importJson),
-        'visualization.importJson.sourceDimension': JSON.stringify(vis.importJson.sourceDimension),
-        'visualization.importJson.targetDimension': JSON.stringify(vis.importJson.targetDimension),
-        'visualization.importJson.nodeSize': JSON.stringify(vis.importJson.nodeSize),
-        'visualization.importJson.dateStartDim': JSON.stringify(vis.importJson.dateStartDim),
-        'visualization.importJson.dateEndDim': JSON.stringify(vis.importJson.dateEndDim),
-        'visualization.importJson.tooltipLabelDim': JSON.stringify(vis.importJson.tooltipLabelDim),
-        'visualization.importJson.countDim.key': vis.importJson.countDim ? JSON.stringify(vis.importJson.countDim.key) : "",
-        'visualization.importJson.tableDimensions.map\\(function\\(d\\) { return d.key; }\\)': vis.importJson.tableDimensions ? JSON.stringify(vis.importJson.tableDimensions.map(function(d) { return d.key; })) : "",
-        'visualization.importJson.titleDim': JSON.stringify(vis.importJson.titleDim),
-        'visualization.importJson.subtitleDim': JSON.stringify(vis.importJson.subtitleDim),
-        'visualization.importJson.textDim': JSON.stringify(vis.importJson.textDim),
-        'visualization.importJson.linkDim': JSON.stringify(vis.importJson.linkDim),
-        'visualization.importJson.imgurlDim': JSON.stringify(vis.importJson.imgurlDim),
-        'visualization.importJson.sortDim': JSON.stringify(vis.importJson.sortDim)
+        'visualization.importJson.dateProp': JSON.stringify(json.dateProp),
+        'visualization.importJson.groupProp': JSON.stringify(json.groupProp),
+        'visualization.importJson.dimKeys': JSON.stringify(json.dimKeys),
+        'visualization.importJson ': JSON.stringify(json),
+        'visualization.importJson.sourceDimension': JSON.stringify(json.sourceDimension),
+        'visualization.importJson.targetDimension': JSON.stringify(json.targetDimension),
+        'visualization.importJson.nodeSize': JSON.stringify(json.nodeSize),
+        'visualization.importJson.dateStartDim': JSON.stringify(json.dateStartDim),
+        'visualization.importJson.dateEndDim': JSON.stringify(json.dateEndDim),
+        'visualization.importJson.tooltipLabelDim': JSON.stringify(json.tooltipLabelDim),
+        'visualization.importJson.countDim.key': json.countDim ? JSON.stringify(json.countDim.key) : "",
+        'visualization.importJson.tableDimensions.map\\(function\\(d\\) { return d.key; }\\)': json.tableDimensions ? JSON.stringify(json.tableDimensions.map(function(d) { return d.key; })) : "",
+        'visualization.importJson.titleDim': JSON.stringify(json.titleDim),
+        'visualization.importJson.subtitleDim': JSON.stringify(json.subtitleDim),
+        'visualization.importJson.textDim': JSON.stringify(json.textDim),
+        'visualization.importJson.linkDim': JSON.stringify(json.linkDim),
+        'visualization.importJson.imgurlDim': JSON.stringify(json.imgurlDim),
+        'visualization.importJson.sortDim': JSON.stringify(json.sortDim)
       }
       var str = func.toString();
       for(var r in replacements) {
